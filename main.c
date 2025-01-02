@@ -5,6 +5,11 @@
 #include <locale.h> 
 #include "codigo_de_barras.h"
 
+#define MIN_X 100 //colunas
+#define MIN_Y 100 //linhas
+#define NOME "teste2.pbm"
+//#define ESPACAMENTO_MIN 4, nao sei como isso vai funcionar
+
 // funcao para validar o código
 int valida_codigo(char codigo[]) {
     int digitos[8];
@@ -45,6 +50,8 @@ int main() {
 
     char codigo[20]; 
     char binario[100];
+    char nome[50];
+    int altura = 0, largura = 0, condicao;
 
     printf("Digite o código de barras EAN-8 (8 dígitos): ");
     scanf("%s", codigo);
@@ -61,16 +68,15 @@ int main() {
         }
     }
 
-
     if (valida_codigo(codigo) == 1)
     {
         //gerar o código
         gera_codigo_barras(codigo, binario);
-
-        //printar o codigo para conferir
+        //printar o codigo para conferir, dps tiro isso
         printf("Código binário do código de barras: %s\n", binario);
+        salva_imagem_pbm(binario, NOME, MIN_Y);
     }
-    
+
     system("pause");
     return 0;
 }

@@ -1,4 +1,4 @@
-//arquivo destinado a fazer o codigo de barras
+//arquivo destinado a função fazer o codigo de barras
 
 #ifndef CODIGO_BARRAS_H
 #define CODIGO_BARRAS_H
@@ -48,5 +48,32 @@ void gera_codigo_barras(char* codigo, char binario[100]) {
 
     binario[pos] = '\0'; 
 }
+
+//função para criar a imagem
+void salva_imagem_pbm(const char* binario, const char* nome_arquivo, int altura) {
+    FILE* arquivo = fopen(nome_arquivo, "w");
+    if (!arquivo) {
+        fprintf(stderr, "Erro: Não foi possível criar o arquivo %s\n", nome_arquivo);
+        return; //remover em breve
+    }
+
+    int largura = strlen(binario); //por enquanto a largura vai ser pré definida pelo tamanho do array
+
+    fprintf(arquivo, "P1\n"); //necessário para imagens PBM          
+    fprintf(arquivo, "%d %d\n", largura, altura); 
+
+    //escrevendo os pixels
+    for (int linha = 0; linha < altura; linha++) {
+        for (int coluna = 0; coluna < largura; coluna++) {
+            fputc(binario[coluna], arquivo);
+            fputc(' ', arquivo); //espaço
+        }
+        fputc('\n', arquivo);
+    }
+
+    fclose(arquivo);
+    printf("Arquivo PBM '%s' criado com sucesso!\n", nome_arquivo);
+}
+
 
 #endif 
