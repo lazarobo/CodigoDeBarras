@@ -64,10 +64,10 @@ int main() {
 
     if (valida_codigo(codigo) == 1)
     {
-        // Gerar o código de barras binário
+        //gerar o código
         gera_codigo_barras(codigo, binario);
 
-        // Exibir o resultado
+        //printar o codigo para conferir
         printf("Código binário do código de barras: %s\n", binario);
     }
     
