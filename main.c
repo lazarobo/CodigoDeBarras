@@ -3,9 +3,10 @@
 #include <string.h>
 #include <ctype.h> 
 #include <locale.h> 
+#include "codigo_de_barras.h"
 
 // funcao para validar o código
-void valida_codigo(char codigo[]) {
+int valida_codigo(char codigo[]) {
     int digitos[8];
     int soma_impares = 0, soma_pares = 0, soma_total, dgt_vcalc, dgt_v;
 
@@ -22,7 +23,7 @@ void valida_codigo(char codigo[]) {
         }
     }
 
-    // calcular o digito verificador correto
+    //calcular o digito verificador correto
     soma_total = soma_impares * 3 + soma_pares;
     dgt_vcalc = (10 - (soma_total % 10)) % 10;
 
@@ -31,16 +32,19 @@ void valida_codigo(char codigo[]) {
 
     if (dgt_vcalc == dgt_v) {
         printf("O código de barras é válido.\n");
+        return 1;
     } else {
         printf("O código de barras é inválido.\n");
+        return 0;
     }
 }
 
-// funcao principal
+//funcao principal
 int main() {
     setlocale(LC_ALL, "pt_BR.UTF-8");
 
     char codigo[20]; 
+    char binario[100];
 
     printf("Digite o código de barras EAN-8 (8 dígitos): ");
     scanf("%s", codigo);
@@ -57,7 +61,16 @@ int main() {
         }
     }
 
-    valida_codigo(codigo);
 
+    if (valida_codigo(codigo) == 1)
+    {
+        // Gerar o código de barras binário
+        gera_codigo_barras(codigo, binario);
+
+        // Exibir o resultado
+        printf("Código binário do código de barras: %s\n", binario);
+    }
+    
+    system("pause");
     return 0;
 }
