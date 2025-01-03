@@ -5,15 +5,19 @@
 #include <locale.h> 
 #include "codigo_de_barras.h"
 
-#define MIN_X 100 // (largura)
+#define MIN_X 200 // (largura)
 #define MIN_Y 100 // (altura)
 #define NOME "teste2.pbm"
+#define ESP 10
+#define AREA 2
 
 //estrutura para armazenar os dados da imagem
 typedef struct {
     int altura;
     int largura;
     char nome[50];
+    int espacamento;
+    int area;
 } ImagemPBM;
 
 //função para validar o código
@@ -58,7 +62,7 @@ int main() {
     char codigo[20]; 
     char binario[100];
     int escolha;
-    ImagemPBM imagem = {MIN_Y, MIN_X, NOME}; 
+    ImagemPBM imagem = {MIN_Y, MIN_X, NOME, ESP, AREA}; 
 
     printf("Digite o código de barras EAN-8 (8 dígitos): ");
     scanf("%s", codigo);
@@ -78,7 +82,7 @@ int main() {
         }
     }
 
-    printf("Deseja informar altura e largura da imagem? (1 - Sim, 0 - Não): ");
+    printf("Deseja informar altura, largura, espaçamento e area da imagem? (1 - Sim, 0 - Não): ");
     scanf("%d", &escolha);
 
     if (escolha == 1) {
@@ -86,6 +90,10 @@ int main() {
         scanf("%d", &imagem.altura);
         printf("Informe a largura da imagem: ");
         scanf("%d", &imagem.largura);
+        printf("Informe o espaçamento da imagem: ");
+        scanf("%d", &imagem.espacamento);
+        printf("Informe a area da imagem: ");
+        scanf("%d", &imagem.area);
     }
 
     printf("Deseja informar o nome da imagem? (1 - Sim, 0 - Não): ");
@@ -104,7 +112,7 @@ int main() {
         printf("Código binário do código de barras: %s\n", binario);
 
         //criar imagem
-        salva_imagem_pbm(binario, imagem.nome, imagem.altura);
+        salva_imagem_pbm(binario, imagem.nome, imagem.largura, imagem.altura, imagem.espacamento, imagem.area);
     }
 
     system("pause");
