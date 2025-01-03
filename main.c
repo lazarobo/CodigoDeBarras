@@ -5,21 +5,28 @@
 #include <locale.h> 
 #include "codigo_de_barras.h"
 
-#define MIN_X 100 //colunas
-#define MIN_Y 100 //linhas
+#define MIN_X 100 // (largura)
+#define MIN_Y 100 // (altura)
 #define NOME "teste2.pbm"
-//#define ESPACAMENTO_MIN 4, nao sei como isso vai funcionar
 
-// funcao para validar o código
+//estrutura para armazenar os dados da imagem
+typedef struct {
+    int altura;
+    int largura;
+    char nome[50];
+} ImagemPBM;
+
+//função para validar o código
 int valida_codigo(char codigo[]) {
     int digitos[8];
     int soma_impares = 0, soma_pares = 0, soma_total, dgt_vcalc, dgt_v;
 
-    // converter para int
+    //converter para inteiro
     for (int i = 0; i < 8; i++) {
         digitos[i] = codigo[i] - '0';
     }
 
+    //dividir pares e ímpares
     for (int i = 0; i < 7; i++) {
         if (i % 2 == 0) {
             soma_impares += digitos[i];
@@ -28,11 +35,11 @@ int valida_codigo(char codigo[]) {
         }
     }
 
-    //calcular o digito verificador correto
+    //calcular o dígito verificador correto
     soma_total = soma_impares * 3 + soma_pares;
     dgt_vcalc = (10 - (soma_total % 10)) % 10;
 
-    //pega o digito fornecido
+    //pega o dígito fornecido
     dgt_v = digitos[7];
 
     if (dgt_vcalc == dgt_v) {
@@ -44,23 +51,26 @@ int valida_codigo(char codigo[]) {
     }
 }
 
-//funcao principal
+//função principal
 int main() {
     setlocale(LC_ALL, "pt_BR.UTF-8");
 
     char codigo[20]; 
     char binario[100];
-    char nome[50];
-    int altura = 0, largura = 0, condicao;
+    int escolha;
+    ImagemPBM imagem = {MIN_Y, MIN_X, NOME}; 
 
     printf("Digite o código de barras EAN-8 (8 dígitos): ");
     scanf("%s", codigo);
 
+    //verificar o tamanho do código digitado
+
     if (strlen(codigo) != 8) {
-        printf("Erro: O código deve conter exatamente 8 dígitos.\n");
+        printf("Erro: O código deve conter exatamente 8 dígitos.\n"); 
         return 1;
     }
 
+    //verifica se há caractéres no código
     for (int i = 0; i < 8; i++) {
         if (!isdigit(codigo[i])) {
             printf("Erro: O código deve conter apenas números.\n");
@@ -68,13 +78,33 @@ int main() {
         }
     }
 
-    if (valida_codigo(codigo) == 1)
-    {
-        //gerar o código
+    printf("Deseja informar altura e largura da imagem? (1 - Sim, 0 - Não): ");
+    scanf("%d", &escolha);
+
+    if (escolha == 1) {
+        printf("Informe a altura da imagem: ");
+        scanf("%d", &imagem.altura);
+        printf("Informe a largura da imagem: ");
+        scanf("%d", &imagem.largura);
+    }
+
+    printf("Deseja informar o nome da imagem? (1 - Sim, 0 - Não): ");
+    scanf("%d", &escolha);
+
+    if (escolha == 1) {
+        printf("Informe o nome da imagem: ");
+        scanf("%s", imagem.nome);
+    }
+
+    if (valida_codigo(codigo) == 1) {
+        //gerar o código obviamente
         gera_codigo_barras(codigo, binario);
-        //printar o codigo para conferir, dps tiro isso
+
+        //exibir o código, dps tiro isso
         printf("Código binário do código de barras: %s\n", binario);
-        salva_imagem_pbm(binario, NOME, MIN_Y);
+
+        //criar imagem
+        salva_imagem_pbm(binario, imagem.nome, imagem.altura);
     }
 
     system("pause");
