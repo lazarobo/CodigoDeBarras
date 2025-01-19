@@ -102,6 +102,7 @@ int main() {
     if (escolha == 1) {
         printf("Informe o nome da imagem: ");
         scanf("%s", imagem.nome);
+        strcat(imagem.nome, ".pbm"); //Adiciona .pbm no final do nome da imagem
     }
 
     if (valida_codigo(codigo) == 1) {
