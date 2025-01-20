@@ -7,7 +7,7 @@
 
 #define MIN_X 200 // (largura)
 #define MIN_Y 100 // (altura)
-#define NOME "teste2.pbm"
+#define NOME "arquivo.pbm"
 #define ESP 10
 #define AREA 2
 
@@ -102,7 +102,7 @@ int main() {
     if (escolha == 1) {
         printf("Informe o nome da imagem: ");
         scanf("%s", imagem.nome);
-        strcat(imagem.nome, ".pbm"); //Adiciona .pbm no final do nome da imagem
+        strcat(imagem.nome, ".pbm"); //adiciona .pbm no final do nome da imagem
     }
 
     if (valida_codigo(codigo) == 1) {
@@ -110,12 +110,15 @@ int main() {
         gera_codigo_barras(codigo, binario);
 
         //exibir o código, dps tiro isso
-        printf("Código binário do código de barras: %s\n", binario);
+        //printf("Código binário do código de barras: %s\n", binario);
 
         //criar imagem
         salva_imagem_pbm(binario, imagem.nome, imagem.largura, imagem.altura, imagem.espacamento, imagem.area);
     }
 
-    system("pause");
+    //system("pause");
+
+    printf("Pressione Enter para sair...");
+    getchar();
     return 0;
 }
